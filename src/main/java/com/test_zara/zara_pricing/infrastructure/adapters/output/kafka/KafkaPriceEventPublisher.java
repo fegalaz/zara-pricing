@@ -2,8 +2,8 @@ package com.test_zara.zara_pricing.infrastructure.adapters.output.kafka;
 
 import com.test_zara.zara_pricing.domain.ports.out.PriceEventPublisher;
 import com.test_zara.zara_pricing.domain.model.Price;
-import com.test_zara.zara_pricing.avro.PricingEvent;
-import com.test_zara.zara_pricing.avro.PriceChangeType;
+import com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType;
+import com.test_zara.zara_pricing.infrastructure.avro.PricingEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

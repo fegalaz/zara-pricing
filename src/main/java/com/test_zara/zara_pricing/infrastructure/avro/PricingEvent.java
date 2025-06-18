@@ -3,8 +3,9 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package com.test_zara.zara_pricing.avro;
+package com.test_zara.zara_pricing.infrastructure.avro;
 
+import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.util.Utf8;
 import org.apache.avro.message.BinaryMessageEncoder;
@@ -13,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 4277964951615020707L;
+  private static final long serialVersionUID = 1963013160110584486L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PricingEvent\",\"namespace\":\"com.test_zara.zara_pricing.avro\",\"fields\":[{\"name\":\"productId\",\"type\":\"string\",\"doc\":\"ID único del producto\"},{\"name\":\"productName\",\"type\":\"string\",\"doc\":\"Nombre del producto\"},{\"name\":\"oldPrice\",\"type\":[\"null\",\"double\"],\"doc\":\"Precio anterior del producto\"},{\"name\":\"newPrice\",\"type\":\"double\",\"doc\":\"Nuevo precio del producto\"},{\"name\":\"currency\",\"type\":\"string\",\"doc\":\"Moneda del precio\",\"default\":\"EUR\"},{\"name\":\"changeType\",\"type\":{\"type\":\"enum\",\"name\":\"PriceChangeType\",\"symbols\":[\"INCREASE\",\"DECREASE\",\"NEW_PRODUCT\"]},\"doc\":\"Tipo de cambio de precio\"},{\"name\":\"timestamp\",\"type\":\"long\",\"doc\":\"Timestamp del evento en milisegundos\"},{\"name\":\"storeId\",\"type\":[\"null\",\"string\"],\"doc\":\"ID de la tienda (opcional)\"},{\"name\":\"category\",\"type\":[\"null\",\"string\"],\"doc\":\"Categoría del producto\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"PricingEvent\",\"namespace\":\"com.test_zara.zara_pricing.infrastructure.avro\",\"fields\":[{\"name\":\"productId\",\"type\":\"string\",\"doc\":\"ID único del producto\"},{\"name\":\"productName\",\"type\":\"string\",\"doc\":\"Nombre del producto\"},{\"name\":\"oldPrice\",\"type\":[\"null\",\"double\"],\"doc\":\"Precio anterior del producto\"},{\"name\":\"newPrice\",\"type\":\"double\",\"doc\":\"Nuevo precio del producto\"},{\"name\":\"currency\",\"type\":\"string\",\"doc\":\"Moneda del precio\",\"default\":\"EUR\"},{\"name\":\"changeType\",\"type\":{\"type\":\"enum\",\"name\":\"PriceChangeType\",\"symbols\":[\"INCREASE\",\"DECREASE\",\"NEW_PRODUCT\"]},\"doc\":\"Tipo de cambio de precio\"},{\"name\":\"timestamp\",\"type\":\"long\",\"doc\":\"Timestamp del evento en milisegundos\"},{\"name\":\"storeId\",\"type\":[\"null\",\"string\"],\"doc\":\"ID de la tienda (opcional)\"},{\"name\":\"category\",\"type\":[\"null\",\"string\"],\"doc\":\"Categoría del producto\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -83,7 +84,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
   /** Moneda del precio */
   private java.lang.CharSequence currency;
   /** Tipo de cambio de precio */
-  private com.test_zara.zara_pricing.avro.PriceChangeType changeType;
+  private com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType changeType;
   /** Timestamp del evento en milisegundos */
   private long timestamp;
   /** ID de la tienda (opcional) */
@@ -110,7 +111,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
    * @param storeId ID de la tienda (opcional)
    * @param category Categoría del producto
    */
-  public PricingEvent(java.lang.CharSequence productId, java.lang.CharSequence productName, java.lang.Double oldPrice, java.lang.Double newPrice, java.lang.CharSequence currency, com.test_zara.zara_pricing.avro.PriceChangeType changeType, java.lang.Long timestamp, java.lang.CharSequence storeId, java.lang.CharSequence category) {
+  public PricingEvent(java.lang.CharSequence productId, java.lang.CharSequence productName, java.lang.Double oldPrice, java.lang.Double newPrice, java.lang.CharSequence currency, com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType changeType, java.lang.Long timestamp, java.lang.CharSequence storeId, java.lang.CharSequence category) {
     this.productId = productId;
     this.productName = productName;
     this.oldPrice = oldPrice;
@@ -155,7 +156,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
     case 2: oldPrice = (java.lang.Double)value$; break;
     case 3: newPrice = (java.lang.Double)value$; break;
     case 4: currency = (java.lang.CharSequence)value$; break;
-    case 5: changeType = (com.test_zara.zara_pricing.avro.PriceChangeType)value$; break;
+    case 5: changeType = (com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType)value$; break;
     case 6: timestamp = (java.lang.Long)value$; break;
     case 7: storeId = (java.lang.CharSequence)value$; break;
     case 8: category = (java.lang.CharSequence)value$; break;
@@ -257,7 +258,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
    * Gets the value of the 'changeType' field.
    * @return Tipo de cambio de precio
    */
-  public com.test_zara.zara_pricing.avro.PriceChangeType getChangeType() {
+  public com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType getChangeType() {
     return changeType;
   }
 
@@ -267,7 +268,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
    * Tipo de cambio de precio
    * @param value the value to set.
    */
-  public void setChangeType(com.test_zara.zara_pricing.avro.PriceChangeType value) {
+  public void setChangeType(com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType value) {
     this.changeType = value;
   }
 
@@ -329,8 +330,8 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
    * Creates a new PricingEvent RecordBuilder.
    * @return A new PricingEvent RecordBuilder
    */
-  public static com.test_zara.zara_pricing.avro.PricingEvent.Builder newBuilder() {
-    return new com.test_zara.zara_pricing.avro.PricingEvent.Builder();
+  public static com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder newBuilder() {
+    return new com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder();
   }
 
   /**
@@ -338,11 +339,11 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
    * @param other The existing builder to copy.
    * @return A new PricingEvent RecordBuilder
    */
-  public static com.test_zara.zara_pricing.avro.PricingEvent.Builder newBuilder(com.test_zara.zara_pricing.avro.PricingEvent.Builder other) {
+  public static com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder newBuilder(com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder other) {
     if (other == null) {
-      return new com.test_zara.zara_pricing.avro.PricingEvent.Builder();
+      return new com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder();
     } else {
-      return new com.test_zara.zara_pricing.avro.PricingEvent.Builder(other);
+      return new com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder(other);
     }
   }
 
@@ -351,11 +352,11 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
    * @param other The existing instance to copy.
    * @return A new PricingEvent RecordBuilder
    */
-  public static com.test_zara.zara_pricing.avro.PricingEvent.Builder newBuilder(com.test_zara.zara_pricing.avro.PricingEvent other) {
+  public static com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder newBuilder(com.test_zara.zara_pricing.infrastructure.avro.PricingEvent other) {
     if (other == null) {
-      return new com.test_zara.zara_pricing.avro.PricingEvent.Builder();
+      return new com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder();
     } else {
-      return new com.test_zara.zara_pricing.avro.PricingEvent.Builder(other);
+      return new com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder(other);
     }
   }
 
@@ -377,7 +378,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
     /** Moneda del precio */
     private java.lang.CharSequence currency;
     /** Tipo de cambio de precio */
-    private com.test_zara.zara_pricing.avro.PriceChangeType changeType;
+    private com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType changeType;
     /** Timestamp del evento en milisegundos */
     private long timestamp;
     /** ID de la tienda (opcional) */
@@ -394,7 +395,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.test_zara.zara_pricing.avro.PricingEvent.Builder other) {
+    private Builder(com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.productId)) {
         this.productId = data().deepCopy(fields()[0].schema(), other.productId);
@@ -438,7 +439,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
      * Creates a Builder by copying an existing PricingEvent instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.test_zara.zara_pricing.avro.PricingEvent other) {
+    private Builder(com.test_zara.zara_pricing.infrastructure.avro.PricingEvent other) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.productId)) {
         this.productId = data().deepCopy(fields()[0].schema(), other.productId);
@@ -494,7 +495,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'productId'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setProductId(java.lang.CharSequence value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setProductId(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.productId = value;
       fieldSetFlags()[0] = true;
@@ -516,7 +517,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * ID único del producto
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearProductId() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearProductId() {
       productId = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -538,7 +539,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'productName'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setProductName(java.lang.CharSequence value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setProductName(java.lang.CharSequence value) {
       validate(fields()[1], value);
       this.productName = value;
       fieldSetFlags()[1] = true;
@@ -560,7 +561,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Nombre del producto
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearProductName() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearProductName() {
       productName = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -582,7 +583,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'oldPrice'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setOldPrice(java.lang.Double value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setOldPrice(java.lang.Double value) {
       validate(fields()[2], value);
       this.oldPrice = value;
       fieldSetFlags()[2] = true;
@@ -604,7 +605,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Precio anterior del producto
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearOldPrice() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearOldPrice() {
       oldPrice = null;
       fieldSetFlags()[2] = false;
       return this;
@@ -626,7 +627,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'newPrice'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setNewPrice(double value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setNewPrice(double value) {
       validate(fields()[3], value);
       this.newPrice = value;
       fieldSetFlags()[3] = true;
@@ -648,7 +649,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Nuevo precio del producto
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearNewPrice() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearNewPrice() {
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -669,7 +670,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'currency'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setCurrency(java.lang.CharSequence value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setCurrency(java.lang.CharSequence value) {
       validate(fields()[4], value);
       this.currency = value;
       fieldSetFlags()[4] = true;
@@ -691,7 +692,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Moneda del precio
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearCurrency() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearCurrency() {
       currency = null;
       fieldSetFlags()[4] = false;
       return this;
@@ -702,7 +703,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Tipo de cambio de precio
       * @return The value.
       */
-    public com.test_zara.zara_pricing.avro.PriceChangeType getChangeType() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType getChangeType() {
       return changeType;
     }
 
@@ -713,7 +714,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'changeType'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setChangeType(com.test_zara.zara_pricing.avro.PriceChangeType value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setChangeType(com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType value) {
       validate(fields()[5], value);
       this.changeType = value;
       fieldSetFlags()[5] = true;
@@ -735,7 +736,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Tipo de cambio de precio
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearChangeType() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearChangeType() {
       changeType = null;
       fieldSetFlags()[5] = false;
       return this;
@@ -757,7 +758,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'timestamp'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setTimestamp(long value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setTimestamp(long value) {
       validate(fields()[6], value);
       this.timestamp = value;
       fieldSetFlags()[6] = true;
@@ -779,7 +780,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Timestamp del evento en milisegundos
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearTimestamp() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearTimestamp() {
       fieldSetFlags()[6] = false;
       return this;
     }
@@ -800,7 +801,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'storeId'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setStoreId(java.lang.CharSequence value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setStoreId(java.lang.CharSequence value) {
       validate(fields()[7], value);
       this.storeId = value;
       fieldSetFlags()[7] = true;
@@ -822,7 +823,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * ID de la tienda (opcional)
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearStoreId() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearStoreId() {
       storeId = null;
       fieldSetFlags()[7] = false;
       return this;
@@ -844,7 +845,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * @param value The value of 'category'.
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder setCategory(java.lang.CharSequence value) {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder setCategory(java.lang.CharSequence value) {
       validate(fields()[8], value);
       this.category = value;
       fieldSetFlags()[8] = true;
@@ -866,7 +867,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
       * Categoría del producto
       * @return This builder.
       */
-    public com.test_zara.zara_pricing.avro.PricingEvent.Builder clearCategory() {
+    public com.test_zara.zara_pricing.infrastructure.avro.PricingEvent.Builder clearCategory() {
       category = null;
       fieldSetFlags()[8] = false;
       return this;
@@ -882,7 +883,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
         record.oldPrice = fieldSetFlags()[2] ? this.oldPrice : (java.lang.Double) defaultValue(fields()[2]);
         record.newPrice = fieldSetFlags()[3] ? this.newPrice : (java.lang.Double) defaultValue(fields()[3]);
         record.currency = fieldSetFlags()[4] ? this.currency : (java.lang.CharSequence) defaultValue(fields()[4]);
-        record.changeType = fieldSetFlags()[5] ? this.changeType : (com.test_zara.zara_pricing.avro.PriceChangeType) defaultValue(fields()[5]);
+        record.changeType = fieldSetFlags()[5] ? this.changeType : (com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType) defaultValue(fields()[5]);
         record.timestamp = fieldSetFlags()[6] ? this.timestamp : (java.lang.Long) defaultValue(fields()[6]);
         record.storeId = fieldSetFlags()[7] ? this.storeId : (java.lang.CharSequence) defaultValue(fields()[7]);
         record.category = fieldSetFlags()[8] ? this.category : (java.lang.CharSequence) defaultValue(fields()[8]);
@@ -976,7 +977,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
 
       this.currency = in.readString(this.currency instanceof Utf8 ? (Utf8)this.currency : null);
 
-      this.changeType = com.test_zara.zara_pricing.avro.PriceChangeType.values()[in.readEnum()];
+      this.changeType = com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType.values()[in.readEnum()];
 
       this.timestamp = in.readLong();
 
@@ -1023,7 +1024,7 @@ public class PricingEvent extends org.apache.avro.specific.SpecificRecordBase im
           break;
 
         case 5:
-          this.changeType = com.test_zara.zara_pricing.avro.PriceChangeType.values()[in.readEnum()];
+          this.changeType = com.test_zara.zara_pricing.infrastructure.avro.PriceChangeType.values()[in.readEnum()];
           break;
 
         case 6:

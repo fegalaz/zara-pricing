@@ -1,6 +1,7 @@
 package com.test_zara.zara_pricing.infrastructure.configs;
 
-import com.test_zara.zara_pricing.avro.PricingEvent;
+
+import com.test_zara.zara_pricing.infrastructure.avro.PricingEvent;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

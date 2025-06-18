@@ -3,11 +3,11 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package com.test_zara.zara_pricing.avro;
+package com.test_zara.zara_pricing.infrastructure.avro;
 @org.apache.avro.specific.AvroGenerated
 public enum PriceChangeType implements org.apache.avro.generic.GenericEnumSymbol<PriceChangeType> {
   INCREASE, DECREASE, NEW_PRODUCT  ;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"enum\",\"name\":\"PriceChangeType\",\"namespace\":\"com.test_zara.zara_pricing.avro\",\"symbols\":[\"INCREASE\",\"DECREASE\",\"NEW_PRODUCT\"]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"enum\",\"name\":\"PriceChangeType\",\"namespace\":\"com.test_zara.zara_pricing.infrastructure.avro\",\"symbols\":[\"INCREASE\",\"DECREASE\",\"NEW_PRODUCT\"]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   @Override
