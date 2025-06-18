@@ -288,6 +288,70 @@ target/site/jacoco/
 | Métodos cubiertos      | ⚙️     | Métodos con pruebas                    |
 | Complejidad            | 🧩     | Complejidad ciclomática                |
 
+# Kafka Local Dev Environment with Schema Registry and Spring Boot
+
+## 🌐 URLs de Acceso
+
+### Kafka UI (Interfaz Web)
+- **URL**: http://localhost:8080
+- **Autenticación**: No requerida
+- **Funcionalidades**:
+    - Visualización de topics y mensajes
+    - Gestión de topics (crear/eliminar)
+    - Explorador de Schema Registry
+    - Monitoreo de consumidores
+
+### Schema Registry API
+- **URL Base**: http://localhost:8081
+- **Endpoint de Schemas**: http://localhost:8081/schemas
+- **Funcionalidades**:
+    - Listado de esquemas registrados
+    - Versiones de esquemas disponibles
+
+### Aplicación Spring Boot
+- **URL Principal**: http://localhost:8082
+- **Swagger UI**: http://localhost:8082/swagger-ui.html
+- **Consola H2**: http://localhost:8082/h2-console  
+  (Credenciales JDBC: ver `application.properties`)
+
+## 🔧 Configuración de Puertos
+
+| Servicio         | Puerto | Descripción                     |
+|------------------|--------|---------------------------------|
+| Kafka Broker     | 9092   | Broker principal                |
+| Schema Registry  | 8081   | API de gestión de schemas       |
+| Kafka UI         | 8080   | Interfaz web de administración  |
+| Zookeeper        | 2181   | Servicio de coordinación        |
+| Spring Boot App  | 8082   | Aplicación de demostración      |
+
+## 📊 Topics Configurados
+
+1. **`pricing-events`**
+    - Topic principal para eventos de pricing
+    - Configuración por defecto: 3 particiones, 1 réplica
+
+2. **`pricing-updates`**
+    - Topic secundario para actualizaciones
+    - Usado para procesamiento en stream
+
+## ✅ Verificación de Configuración
+
+La configuración local ha sido validada con los siguientes checks:
+
+- [x] Kafka accesible en `localhost:9092`
+- [x] Schema Registry operativo en puerto 8081
+- [x] Interfaz web disponible en puerto 8080
+- [x] Topics creados con las configuraciones esperadas
+
+## 🚀 Primeros Pasos
+
+1. **Explorar mensajes**:
+   ```bash
+   kafka-console-consumer --bootstrap-server localhost:9092 --topic pricing-events --from-beginning
+
+
+
+
 
 # Evidencia de los test 100% pasados
 ![img.png](img.png)

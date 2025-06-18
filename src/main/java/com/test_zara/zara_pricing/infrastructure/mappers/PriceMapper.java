@@ -6,13 +6,11 @@ import com.test_zara.zara_pricing.infrastructure.adapters.output.persistence.jpa
 import com.test_zara.zara_pricing.infrastructure.dto.PriceResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 
 import java.util.List;
 
-@Mapper(
-        componentModel = "spring")
-        //nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
-        //nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PriceMapper {
 
     @Mapping(target = "currency", source = "curr")

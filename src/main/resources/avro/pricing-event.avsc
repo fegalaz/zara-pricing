@@ -1,0 +1,57 @@
+{
+  "namespace": "com.test_zara.zara_pricing.avro",
+  "type": "record",
+  "name": "PricingEvent",
+  "fields": [
+    {
+      "name": "productId",
+      "type": "string",
+      "doc": "ID único del producto"
+    },
+    {
+      "name": "productName",
+      "type": "string",
+      "doc": "Nombre del producto"
+    },
+    {
+      "name": "oldPrice",
+      "type": ["null", "double"],
+      "doc": "Precio anterior del producto"
+    },
+    {
+      "name": "newPrice",
+      "type": "double",
+      "doc": "Nuevo precio del producto"
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "default": "EUR",
+      "doc": "Moneda del precio"
+    },
+    {
+      "name": "changeType",
+      "type": {
+        "type": "enum",
+        "name": "PriceChangeType",
+        "symbols": ["INCREASE", "DECREASE", "NEW_PRODUCT"]
+      },
+      "doc": "Tipo de cambio de precio"
+    },
+    {
+      "name": "timestamp",
+      "type": "long",
+      "doc": "Timestamp del evento en milisegundos"
+    },
+    {
+      "name": "storeId",
+      "type": ["null", "string"],
+      "doc": "ID de la tienda (opcional)"
+    },
+    {
+      "name": "category",
+      "type": ["null", "string"],
+      "doc": "Categoría del producto"
+    }
+  ]
+} 

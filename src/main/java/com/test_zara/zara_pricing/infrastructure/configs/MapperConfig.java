@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MapperConfig {
-
-    @Bean
-    public PriceMapper priceMapper() {
-        return new PriceMapperImpl();
-    }
+//
+//    @Bean
+//    public PriceMapper priceMapper() {
+//        return new PriceMapperImpl();
+//    }
 } 
