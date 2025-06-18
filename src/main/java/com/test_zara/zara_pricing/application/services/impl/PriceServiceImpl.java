@@ -7,7 +7,7 @@ import com.test_zara.zara_pricing.domain.model.Price;
 import com.test_zara.zara_pricing.domain.ports.in.PriceInputPort;
 import com.test_zara.zara_pricing.domain.ports.out.PriceOutputPort;
 import com.test_zara.zara_pricing.domain.services.PriceDomainService;
-import com.test_zara.zara_pricing.infrastructure.adapters.output.kafka.KafkaPriceEventPublisher;
+import com.test_zara.zara_pricing.domain.ports.out.PriceEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class PriceServiceImpl implements PriceService, PriceInputPort {
 
     private final PriceOutputPort priceOutputPort;
     private final PriceDomainService priceDomainService;
-    private final KafkaPriceEventPublisher kafkaPriceEventPublisher;
+    private final PriceEventPublisher priceEventPublisher;
 
     @Override
     public Price getFinalPrice(LocalDateTime date, Long productId, Integer brandId) {
@@ -30,7 +30,7 @@ public class PriceServiceImpl implements PriceService, PriceInputPort {
                 .orElseThrow(() -> new PriceNotFoundException("Price not found for the given criteria"));
 
         try {
-            kafkaPriceEventPublisher.publishPriceRetrieved(price);
+            priceEventPublisher.publishPriceRetrieved(price);
             log.info("Evento de precio recuperado publicado para productId: {}, brandId: {}", productId, brandId);
         } catch (Exception e) {
             log.error("Error al publicar evento de precio recuperado: {}", e.getMessage(), e);
@@ -44,7 +44,7 @@ public class PriceServiceImpl implements PriceService, PriceInputPort {
         Price selectedPrice = priceDomainService.selectHighestPriorityPrice(applicablePrices);
 
         try {
-            kafkaPriceEventPublisher.publishPriceRetrieved(selectedPrice);
+            priceEventPublisher.publishPriceRetrieved(selectedPrice);
             log.info("Evento de precio con convención publicado para productId: {}, brandId: {}", productId, brandId);
         } catch (Exception e) {
             log.error("Error al publicar evento de precio con convención: {}", e.getMessage(), e);
@@ -58,7 +58,7 @@ public class PriceServiceImpl implements PriceService, PriceInputPort {
 
         prices.forEach(price -> {
             try {
-                kafkaPriceEventPublisher.publishPriceRetrieved(price);
+                priceEventPublisher.publishPriceRetrieved(price);
             } catch (Exception e) {
                 log.error("Error al publicar evento de precio en lista: {}", e.getMessage(), e);
             }

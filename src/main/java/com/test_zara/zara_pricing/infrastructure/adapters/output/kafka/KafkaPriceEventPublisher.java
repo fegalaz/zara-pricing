@@ -1,5 +1,6 @@
 package com.test_zara.zara_pricing.infrastructure.adapters.output.kafka;
 
+import com.test_zara.zara_pricing.domain.ports.out.PriceEventPublisher;
 import com.test_zara.zara_pricing.domain.model.Price;
 import com.test_zara.zara_pricing.avro.PricingEvent;
 import com.test_zara.zara_pricing.avro.PriceChangeType;
@@ -16,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class KafkaPriceEventPublisher {
+public class KafkaPriceEventPublisher implements PriceEventPublisher {
 
     private final KafkaTemplate<String, PricingEvent> kafkaTemplate;
 
@@ -26,6 +27,7 @@ public class KafkaPriceEventPublisher {
     /**
      * Publica un evento de precio recuperado usando Avro
      */
+    @Override
     public void publishPriceRetrieved(Price price) {
         try {
             PricingEvent event = buildPricingEvent(price, PriceChangeType.NEW_PRODUCT);
