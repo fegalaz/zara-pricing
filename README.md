@@ -2,23 +2,31 @@
 
 Microservicio Spring Boot que determina el precio final de productos aplicando reglas de prioridad sobre tarifas temporales, con arquitectura hexagonal y base de datos H2 en memoria.
 
+---
+
 # 🚀 Quick Start
 
 
-### 1. Clonar repositorio
+### 1. Clonar repositorio utilizando SSH
 ```bash
-git clone [repo-url] && cd zara-pricing-api
+git clone git@github.com:fegalaz/zara-pricing.git 
 ```
 
-### 2. Iniciar la aplicación (requiere Maven 3.8+ y Java 21)
+### 3. Limpiar y compilar el artefacto (requiere Maven 3.8+ y Java 21)
+```bash
+mvn clean install compile
+```
+
+### 3. Iniciar la aplicación (requiere Maven 3.8+ y Java 21)
 ```bash
 mvn spring-boot:run
 ```
 
 ### 3. Probar endpoint de ejemplo
 ```bash
-curl "http://localhost:8080/api/v1/rest/prices/final-price?date=2020-06-14-15.00.00&productId=35455&brandId=1"
+curl "http://localhost:8082/api/v1/rest/prices/final-price?date=2020-06-14-15.00.00&productId=35455&brandId=1"
 ```
+---
 
 ## 🚀 Tecnologías Utilizadas
 
@@ -85,6 +93,8 @@ Generación automática de API docs con:
 - UI interactiva en `/swagger-ui.html`
 - Anotaciones `@Operation`, `@ApiResponse`
 
+---
+
 ## 🗄️ Estructura de la Base de Datos
 
 La aplicación utiliza una base de datos H2 en memoria que se inicializa automáticamente con:
@@ -123,6 +133,7 @@ INSERT INTO prices (brand_id, start_date, end_date, price_list, product_id, prio
 (1, '2020-06-15 00:00:00', '2020-06-15 11:00:00', 3, 35455, 1, 30.50, 'EUR'),
 (1, '2020-06-15 16:00:00', '2020-12-31 23:59:59', 4, 35455, 1, 38.95, 'EUR');
 ```
+---
 
 ## 📌 Endpoints
 
@@ -136,7 +147,7 @@ INSERT INTO prices (brand_id, start_date, end_date, price_list, product_id, prio
 
 **Ejemplo**:
 ```bash
-GET localhost:8080/api/v1/rest/prices/final-price?date=2020-06-14 15:00:00&productId=35455&brandId=1
+GET localhost:8082/api/v1/rest/prices/final-price?date=2020-06-14 15:00:00&productId=35455&brandId=1
 ```
 
 ✅ Ejemplo de respuesta exitosa (200 OK):
@@ -163,6 +174,7 @@ GET localhost:8080/api/v1/rest/prices/final-price?date=2020-06-14 15:00:00&produ
   "path": "/api/v1/prices/final-price"
 }
 ```
+---
 
 ## 🏗️ Arquitectura Hexagonal del Proyecto
 
@@ -215,6 +227,7 @@ src/main/java/com/inditex/zara/
     ├── application.yml                   <<Config>> (Propiedades: BD, logs, etc.)
     └── schema.sql                        <<DB>> (Esquema inicial de tablas) 
 ```
+---
 
 
 ## 🔍 Documentación de APIs
@@ -222,6 +235,8 @@ src/main/java/com/inditex/zara/
 📌 Interfaz Swagger UI: http://localhost:8080/swagger-ui.html
 
 📌 Esquema OpenAPI JSON: http://localhost:8080/v3/api-docs
+
+---
 
 ## 🚀 Colección de Postman
 
@@ -288,6 +303,8 @@ target/site/jacoco/
 | Métodos cubiertos      | ⚙️     | Métodos con pruebas                    |
 | Complejidad            | 🧩     | Complejidad ciclomática                |
 
+---
+
 # Kafka Local Dev Environment with Schema Registry and Spring Boot
 
 ## 🌐 URLs de Acceso
@@ -314,7 +331,7 @@ target/site/jacoco/
 - **Consola H2**: http://localhost:8082/h2-console  
   (Credenciales JDBC: ver `application.properties`)
 
-## 🔧 Configuración de Puertos
+## 🔧 Configuración de Puertos en Kafka
 
 | Servicio         | Puerto | Descripción                     |
 |------------------|--------|---------------------------------|
@@ -349,12 +366,7 @@ La configuración local ha sido validada con los siguientes checks:
    ```bash
    kafka-console-consumer --bootstrap-server localhost:9092 --topic pricing-events --from-beginning
 
-
-
-
-
-# Evidencia de los test 100% pasados
-![img.png](img.png)
+---
 
 ## ✉️ Contacto
 📧 **Email**: [fe.galaz@gmail.com](fe.galaz@gmail.com)  
