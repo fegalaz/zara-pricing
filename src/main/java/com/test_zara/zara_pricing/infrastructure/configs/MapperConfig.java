@@ -12,4 +12,4 @@ public class MapperConfig {
     public PriceMapper priceMapper() {
         return new PriceMapperImpl();
     }
-} 
+}
