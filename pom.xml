@@ -162,6 +162,7 @@
                     <excludes>
                         <exclude>com/test_zara/zara_pricing/infrastructure/mappers/**/*</exclude>
                         <exclude>com/test_zara/zara_pricing/infrastructure/exceptions/**/*</exclude>
+                        <exclude>com/test_zara/zara_pricing/infrastructure/adapters/output/kafka/**/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -184,7 +185,7 @@
             </plugin>
         </plugins>
     </build>
-
+    <!-- Repositories for Confluent -->
     <repositories>
         <repository>
             <id>confluent</id>
