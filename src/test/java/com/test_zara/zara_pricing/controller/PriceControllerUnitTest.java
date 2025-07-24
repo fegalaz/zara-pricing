@@ -11,14 +11,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,19 +36,20 @@ class PriceControllerUnitTest {
 
     @Test
     void testGetFinalPrice() {
+        // Arrange
         LocalDateTime date = LocalDateTime.of(2020, 6, 14, 15, 0, 0);
         Long productId = 35455L;
         Integer brandId = 1;
 
         Price mockPrice = new Price(
-            brandId,
-            LocalDateTime.of(2020, 6, 14, 0, 0),
-            LocalDateTime.of(2020, 12, 31, 23, 59),
-            2,
-            productId,
-            0,
-            new BigDecimal("25.45"),
-            "EUR"
+                brandId,
+                LocalDateTime.of(2020, 6, 14, 0, 0),
+                LocalDateTime.of(2020, 12, 31, 23, 59),
+                2,
+                productId,
+                0,
+                new BigDecimal("25.45"),
+                "EUR"
         );
 
         PriceResponse mockResponse = PriceResponse.builder()
@@ -57,13 +58,17 @@ class PriceControllerUnitTest {
                 .finalPrice("25.45 EUR")
                 .build();
 
-        when(priceInputPort.getFinalPrice(date, productId, brandId)).thenReturn(mockPrice);
+        when(priceInputPort.getFinalPrice(date, productId, brandId)).thenReturn(Mono.just(mockPrice));
         when(priceMapper.toDto(mockPrice)).thenReturn(mockResponse);
 
-        ResponseEntity<PriceResponse> response = priceController.getFinalPrice(date, productId, brandId);
+        // Act
+        Mono<PriceResponse> responseMono = priceController.getFinalPrice(date, productId, brandId);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockResponse, response.getBody());
+        // Assert
+        StepVerifier.create(responseMono)
+                .expectNext(mockResponse)
+                .verifyComplete();
+
         verify(priceInputPort).getFinalPrice(date, productId, brandId);
         verify(priceMapper).toDto(mockPrice);
     }
@@ -91,13 +96,14 @@ class PriceControllerUnitTest {
                 .finalPrice("25.45 EUR")
                 .build();
 
-        when(priceInputPort.getFinalPriceWithConvention(date, productId, brandId)).thenReturn(mockPrice);
+        when(priceInputPort.getFinalPriceWithConvention(date, productId, brandId)).thenReturn(Mono.just(mockPrice));
         when(priceMapper.toDto(mockPrice)).thenReturn(mockResponse);
 
-        ResponseEntity<PriceResponse> response = priceController.getFinalPriceWithConvention(date, productId, brandId);
+        Mono<PriceResponse> responseMono = priceController.getFinalPriceWithConvention(date, productId, brandId);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockResponse, response.getBody());
+        StepVerifier.create(responseMono)
+                .expectNext(mockResponse)
+                .verifyComplete();
         verify(priceInputPort).getFinalPriceWithConvention(date, productId, brandId);
         verify(priceMapper).toDto(mockPrice);
     }
@@ -105,19 +111,21 @@ class PriceControllerUnitTest {
     @Test
     void testGetPricesListAll() {
         List<Price> mockPrices = PriceFixtures.getPricesFixtures();
-        List<PriceResponse> mockResponses = List.of(
-                PriceResponse.builder().finalPrice("19.99 EUR").build(),
-                PriceResponse.builder().finalPrice("29.99 EUR").build()
-        );
+        PriceResponse mockResponse1 = PriceResponse.builder().finalPrice("19.99 EUR").build();
+        PriceResponse mockResponse2 = PriceResponse.builder().finalPrice("29.99 EUR").build();
 
-        when(priceInputPort.getPricesListAll()).thenReturn(mockPrices);
-        when(priceMapper.toDto(mockPrices)).thenReturn(mockResponses);
+        when(priceInputPort.getPricesListAll()).thenReturn(Flux.fromIterable(mockPrices));
+        when(priceMapper.toDto(mockPrices.get(0))).thenReturn(mockResponse1);
+        when(priceMapper.toDto(mockPrices.get(1))).thenReturn(mockResponse2);
 
-        ResponseEntity<List<PriceResponse>> response = priceController.getPricesListAll();
+        Flux<PriceResponse> responseFlux = priceController.getPricesListAll();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockResponses, response.getBody());
+        StepVerifier.create(responseFlux)
+                .expectNext(mockResponse1)
+                .expectNext(mockResponse2)
+                .verifyComplete();
         verify(priceInputPort).getPricesListAll();
-        verify(priceMapper).toDto(mockPrices);
+        verify(priceMapper).toDto(mockPrices.get(0));
+        verify(priceMapper).toDto(mockPrices.get(1));
     }
 }

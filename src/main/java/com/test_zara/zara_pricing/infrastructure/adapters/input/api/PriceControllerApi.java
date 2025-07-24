@@ -8,12 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 public interface PriceControllerApi {
 
@@ -27,7 +27,7 @@ public interface PriceControllerApi {
                             content = @Content(schema = @Schema(implementation = PriceResponse.class))
                     )})
     @GetMapping("/final-price")
-    ResponseEntity<PriceResponse> getFinalPrice(
+    Mono<PriceResponse> getFinalPrice(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime date,
             @RequestParam @NotNull @Positive Long productId,
             @RequestParam @NotNull @Positive Integer brandId);
@@ -43,7 +43,7 @@ public interface PriceControllerApi {
                             content = @Content(schema = @Schema(implementation = PriceResponse.class))
                     )})
     @GetMapping("/final-price-convention")
-    ResponseEntity<PriceResponse> getFinalPriceWithConvention(
+    Mono<PriceResponse> getFinalPriceWithConvention(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime date,
             @RequestParam @NotNull @Positive Long productId,
             @RequestParam @NotNull @Positive Integer brandId);
@@ -59,5 +59,5 @@ public interface PriceControllerApi {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PriceResponse.class, type = "array")))})
     @GetMapping("/price-list-all")
-    ResponseEntity<List<PriceResponse>> getPricesListAll();
+    Flux<PriceResponse> getPricesListAll();
 }

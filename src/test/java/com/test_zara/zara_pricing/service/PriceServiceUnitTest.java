@@ -11,12 +11,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,13 +45,17 @@ class PriceServiceUnitTest {
         LocalDateTime endDate = LocalDateTime.of(2020, 6, 14, 18, 30, 0);
         Price price = new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR");
 
-        when(priceOutputPort.findFinalPrice(any(), any(), any())).thenReturn(Optional.of(price));
+        when(priceOutputPort.findFinalPrice(any(), any(), any())).thenReturn(Mono.just(price));
         doNothing().when(priceEventPublisher).publishPriceRetrieved(any(Price.class));
 
-        Price response = priceService.getFinalPrice(startDate, 35455L, 1);
+        Mono<Price> responseMono = priceService.getFinalPrice(startDate, 35455L, 1);
 
-        assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
-        assertThat(response.productId()).isEqualTo(35455L);
+        StepVerifier.create(responseMono)
+            .assertNext(response -> {
+                assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
+                assertThat(response.productId()).isEqualTo(35455L);
+            })
+            .verifyComplete();
         verify(priceOutputPort, times(1)).findFinalPrice(any(), any(), any());
         verify(priceEventPublisher, times(1)).publishPriceRetrieved(price);
     }
@@ -60,13 +66,17 @@ class PriceServiceUnitTest {
         LocalDateTime endDate = LocalDateTime.of(2020, 6, 14, 18, 30, 0);
         Price price = new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR");
 
-        when(priceOutputPort.findFinalPrice(any(), any(), any())).thenReturn(Optional.of(price));
+        when(priceOutputPort.findFinalPrice(any(), any(), any())).thenReturn(Mono.just(price));
         doThrow(new RuntimeException("Publisher error")).when(priceEventPublisher).publishPriceRetrieved(any(Price.class));
 
-        Price response = priceService.getFinalPrice(startDate, 35455L, 1);
+        Mono<Price> responseMono = priceService.getFinalPrice(startDate, 35455L, 1);
 
-        assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
-        assertThat(response.productId()).isEqualTo(35455L);
+        StepVerifier.create(responseMono)
+            .assertNext(response -> {
+                assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
+                assertThat(response.productId()).isEqualTo(35455L);
+            })
+            .verifyComplete();
         verify(priceOutputPort, times(1)).findFinalPrice(any(), any(), any());
         verify(priceEventPublisher, times(1)).publishPriceRetrieved(price);
     }
@@ -75,12 +85,13 @@ class PriceServiceUnitTest {
     void whenPriceNotFoundThenThrowException() {
         LocalDateTime startDate = LocalDateTime.of(2020, 6, 14, 15, 0, 0);
 
-        when(priceOutputPort.findFinalPrice(any(), any(), any())).thenReturn(Optional.empty());
+        when(priceOutputPort.findFinalPrice(any(), any(), any())).thenReturn(Mono.empty());
 
-        org.junit.jupiter.api.Assertions.assertThrows(
-                PriceNotFoundException.class,
-                () -> priceService.getFinalPrice(startDate, 35455L, 1)
-        );
+        Mono<Price> responseMono = priceService.getFinalPrice(startDate, 35455L, 1);
+
+        StepVerifier.create(responseMono)
+            .expectError(PriceNotFoundException.class)
+            .verify();
         verify(priceOutputPort, times(1)).findFinalPrice(any(), any(), any());
         verify(priceEventPublisher, never()).publishPriceRetrieved(any(Price.class));
     }
@@ -92,14 +103,18 @@ class PriceServiceUnitTest {
         Price price = new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR");
         List<Price> prices = Collections.singletonList(price);
 
-        when(priceOutputPort.findFinalPriceWithConvention(any(), any(), any())).thenReturn(prices);
+        when(priceOutputPort.findFinalPriceWithConvention(any(), any(), any())).thenReturn(Flux.fromIterable(prices));
         when(priceDomainService.selectHighestPriorityPrice(prices)).thenReturn(price);
         doNothing().when(priceEventPublisher).publishPriceRetrieved(any(Price.class));
 
-        Price response = priceService.getFinalPriceWithConvention(startDate, 35455L, 1);
+        Mono<Price> responseMono = priceService.getFinalPriceWithConvention(startDate, 35455L, 1);
 
-        assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
-        assertThat(response.productId()).isEqualTo(35455L);
+        StepVerifier.create(responseMono)
+            .assertNext(response -> {
+                assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
+                assertThat(response.productId()).isEqualTo(35455L);
+            })
+            .verifyComplete();
         verify(priceOutputPort, times(1)).findFinalPriceWithConvention(any(), any(), any());
         verify(priceDomainService, times(1)).selectHighestPriorityPrice(prices);
         verify(priceEventPublisher, times(1)).publishPriceRetrieved(price);
@@ -112,14 +127,18 @@ class PriceServiceUnitTest {
         Price price = new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR");
         List<Price> prices = Collections.singletonList(price);
 
-        when(priceOutputPort.findFinalPriceWithConvention(any(), any(), any())).thenReturn(prices);
+        when(priceOutputPort.findFinalPriceWithConvention(any(), any(), any())).thenReturn(Flux.fromIterable(prices));
         when(priceDomainService.selectHighestPriorityPrice(prices)).thenReturn(price);
         doThrow(new RuntimeException("Publisher error")).when(priceEventPublisher).publishPriceRetrieved(any(Price.class));
 
-        Price response = priceService.getFinalPriceWithConvention(startDate, 35455L, 1);
+        Mono<Price> responseMono = priceService.getFinalPriceWithConvention(startDate, 35455L, 1);
 
-        assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
-        assertThat(response.productId()).isEqualTo(35455L);
+        StepVerifier.create(responseMono)
+            .assertNext(response -> {
+                assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
+                assertThat(response.productId()).isEqualTo(35455L);
+            })
+            .verifyComplete();
         verify(priceOutputPort, times(1)).findFinalPriceWithConvention(any(), any(), any());
         verify(priceDomainService, times(1)).selectHighestPriorityPrice(prices);
         verify(priceEventPublisher, times(1)).publishPriceRetrieved(price);
@@ -130,14 +149,15 @@ class PriceServiceUnitTest {
         LocalDateTime startDate = LocalDateTime.of(2020, 6, 14, 15, 0, 0);
         List<Price> emptyList = Collections.emptyList();
 
-        when(priceOutputPort.findFinalPriceWithConvention(any(), any(), any())).thenReturn(emptyList);
+        when(priceOutputPort.findFinalPriceWithConvention(any(), any(), any())).thenReturn(Flux.fromIterable(emptyList));
         when(priceDomainService.selectHighestPriorityPrice(emptyList))
                 .thenThrow(new PriceNotFoundException("No prices available for selection"));
 
-        org.junit.jupiter.api.Assertions.assertThrows(
-                PriceNotFoundException.class,
-                () -> priceService.getFinalPriceWithConvention(startDate, 35455L, 1)
-        );
+        Mono<Price> responseMono = priceService.getFinalPriceWithConvention(startDate, 35455L, 1);
+
+        StepVerifier.create(responseMono)
+            .expectError(PriceNotFoundException.class)
+            .verify();
         verify(priceOutputPort, times(1)).findFinalPriceWithConvention(any(), any(), any());
         verify(priceDomainService, times(1)).selectHighestPriorityPrice(emptyList);
         verify(priceEventPublisher, never()).publishPriceRetrieved(any(Price.class));
@@ -151,13 +171,17 @@ class PriceServiceUnitTest {
                 new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR")
         );
 
-        when(priceOutputPort.findAll()).thenReturn(prices);
+        when(priceOutputPort.findAll()).thenReturn(Flux.fromIterable(prices));
         doNothing().when(priceEventPublisher).publishPriceRetrieved(any(Price.class));
 
-        List<Price> response = priceService.getPricesListAll();
+        Flux<Price> responseFlux = priceService.getPricesListAll();
 
-        assertThat(response.getFirst().price()).isEqualTo(new BigDecimal("25.45"));
-        assertThat(response.getFirst().productId()).isEqualTo(35455L);
+        StepVerifier.create(responseFlux)
+            .assertNext(response -> {
+                assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
+                assertThat(response.productId()).isEqualTo(35455L);
+            })
+            .verifyComplete();
         verify(priceOutputPort, times(1)).findAll();
         verify(priceEventPublisher, times(1)).publishPriceRetrieved(prices.get(0));
     }
@@ -170,13 +194,17 @@ class PriceServiceUnitTest {
                 new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR")
         );
 
-        when(priceOutputPort.findAll()).thenReturn(prices);
+        when(priceOutputPort.findAll()).thenReturn(Flux.fromIterable(prices));
         doThrow(new RuntimeException("Publisher error")).when(priceEventPublisher).publishPriceRetrieved(any(Price.class));
 
-        List<Price> response = priceService.getPricesListAll();
+        Flux<Price> responseFlux = priceService.getPricesListAll();
 
-        assertThat(response.getFirst().price()).isEqualTo(new BigDecimal("25.45"));
-        assertThat(response.getFirst().productId()).isEqualTo(35455L);
+        StepVerifier.create(responseFlux)
+            .assertNext(response -> {
+                assertThat(response.price()).isEqualTo(new BigDecimal("25.45"));
+                assertThat(response.productId()).isEqualTo(35455L);
+            })
+            .verifyComplete();
         verify(priceOutputPort, times(1)).findAll();
         verify(priceEventPublisher, times(1)).publishPriceRetrieved(prices.get(0));
     }
@@ -190,14 +218,15 @@ class PriceServiceUnitTest {
                 new Price(2, startDate, endDate, 1, 35455L, 0, new BigDecimal("30.50"), "EUR")
         );
 
-        when(priceOutputPort.findAll()).thenReturn(prices);
+        when(priceOutputPort.findAll()).thenReturn(Flux.fromIterable(prices));
         doNothing().when(priceEventPublisher).publishPriceRetrieved(any(Price.class));
 
-        List<Price> response = priceService.getPricesListAll();
+        Flux<Price> responseFlux = priceService.getPricesListAll();
 
-        assertThat(response).hasSize(2);
-        assertThat(response.get(0).price()).isEqualTo(new BigDecimal("25.45"));
-        assertThat(response.get(1).price()).isEqualTo(new BigDecimal("30.50"));
+        StepVerifier.create(responseFlux)
+            .expectNextMatches(p -> p.price().equals(new BigDecimal("25.45")))
+            .expectNextMatches(p -> p.price().equals(new BigDecimal("30.50")))
+            .verifyComplete();
         verify(priceOutputPort, times(1)).findAll();
         verify(priceEventPublisher, times(2)).publishPriceRetrieved(any(Price.class));
     }

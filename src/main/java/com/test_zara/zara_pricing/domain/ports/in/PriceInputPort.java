@@ -4,13 +4,14 @@ package com.test_zara.zara_pricing.domain.ports.in;
 import com.test_zara.zara_pricing.domain.model.Price;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 public interface PriceInputPort {
 
-    Price getFinalPrice(LocalDateTime date, Long productId, Integer brandId);
+    Mono<Price> getFinalPrice(LocalDateTime date, Long productId, Integer brandId);
 
-    Price getFinalPriceWithConvention(LocalDateTime date, Long productId, Integer brandId);
+    Mono<Price> getFinalPriceWithConvention(LocalDateTime date, Long productId, Integer brandId);
 
-    List<Price> getPricesListAll();
+    Flux<Price> getPricesListAll();
 }

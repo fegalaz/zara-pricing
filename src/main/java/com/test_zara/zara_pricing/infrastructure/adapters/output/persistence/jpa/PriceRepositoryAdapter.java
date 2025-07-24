@@ -6,21 +6,20 @@ import com.test_zara.zara_pricing.infrastructure.adapters.output.persistence.jpa
 import com.test_zara.zara_pricing.infrastructure.mappers.PriceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class PriceRepositoryAdapter implements PriceOutputPort {
 
     private final DataPriceRepository jpaRepository;
-
     private final PriceMapper priceMapper;
 
     @Override
-    public Optional<Price> findFinalPrice(
+    public Mono<Price> findFinalPrice(
             Integer brandId,
             Long productId,
             LocalDateTime date
@@ -31,24 +30,18 @@ public class PriceRepositoryAdapter implements PriceOutputPort {
     }
 
     @Override
-    public List<Price> findFinalPriceWithConvention(
+    public Flux<Price> findFinalPriceWithConvention(
             Integer brandId,
             Long productId,
             LocalDateTime date
     ) {
         return jpaRepository
-                .findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
-                        brandId, productId, date, date)
-                .stream()
-                .map(priceMapper::toDomain)
-                .toList();
+                .findFinalPriceWithConvention(brandId, productId, date)
+                .map(priceMapper::toDomain);
     }
 
     @Override
-    public List<Price> findAll() {
-        return jpaRepository.findAll()
-                .stream()
-                .map(priceMapper::toDomain)
-                .toList();
+    public Flux<Price> findAll() {
+        return jpaRepository.findAll().map(priceMapper::toDomain);
     }
 }

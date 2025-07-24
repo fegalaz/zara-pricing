@@ -4,13 +4,17 @@ package com.test_zara.zara_pricing.application.services;
 import com.test_zara.zara_pricing.domain.model.Price;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 public interface PriceService {
 
-    Price getFinalPrice(LocalDateTime date, Long productId, Integer brandId);
+    // Ahora el método devuelve un Mono (reactivo) en vez de Price
+    Mono<Price> getFinalPrice(LocalDateTime date, Long productId, Integer brandId);
 
-    Price getFinalPriceWithConvention(LocalDateTime date, Long productId, Integer brandId);
+    // También migramos este método a Mono
+    Mono<Price> getFinalPriceWithConvention(LocalDateTime date, Long productId, Integer brandId);
 
-    List<Price> getPricesListAll();
+    // Este método ahora devuelve un Flux (muchos elementos)
+    Flux<Price> getPricesListAll();
 }

@@ -17,10 +17,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,16 +49,17 @@ class PriceRepositoryAdapterUnitTest {
         LocalDateTime startDate = LocalDateTime.of(2020, 6, 14, 15, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(2020, 6, 14, 18, 30, 0);
 
-        Optional<PriceEntity> entity = Optional.of(new PriceEntity());
+        PriceEntity entity = new PriceEntity();
         Price price = new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR");
 
-        when(dataPriceRepository.findFinalPriceWithJpql(brandId, productId, date)).thenReturn(entity);
+        when(dataPriceRepository.findFinalPriceWithJpql(brandId, productId, date)).thenReturn(Mono.just(entity));
         when(priceMapper.toDomain(any(PriceEntity.class))).thenReturn(price);
 
-        Optional<Price> result = adapter.findFinalPrice(brandId, productId, date);
+        Mono<Price> resultMono = adapter.findFinalPrice(brandId, productId, date);
 
-        assertTrue(result.isPresent());
-        assertEquals(price, result.get());
+        StepVerifier.create(resultMono)
+            .expectNext(price)
+            .verifyComplete();
         verify(dataPriceRepository).findFinalPriceWithJpql(brandId, productId, date);
     }
 
@@ -73,14 +74,15 @@ class PriceRepositoryAdapterUnitTest {
 
         Price expectedPrice = new Price(1, date, date, 2, 35455L, 0, new BigDecimal("25.45"), "EUR");
 
-        when(dataPriceRepository.findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(brandId, productId, date,date)).thenReturn(entities);
+        when(dataPriceRepository.findFinalPriceWithConvention(brandId, productId, date)).thenReturn(Flux.fromIterable(entities));
         when(priceMapper.toDomain(entity)).thenReturn(expectedPrice);
 
-        List<Price> result = adapter.findFinalPriceWithConvention(brandId, productId, date);
+        Flux<Price> resultFlux = adapter.findFinalPriceWithConvention(brandId, productId, date);
 
-        assertEquals(1, result.size());
-        assertEquals(expectedPrice, result.getFirst());
-        verify(dataPriceRepository).findByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(brandId, productId, date,date);
+        StepVerifier.create(resultFlux)
+            .expectNext(expectedPrice)
+            .verifyComplete();
+        verify(dataPriceRepository).findFinalPriceWithConvention(brandId, productId, date);
     }
 
     @Test
@@ -90,13 +92,14 @@ class PriceRepositoryAdapterUnitTest {
         LocalDateTime endDate = LocalDateTime.of(2020, 6, 14, 18, 30, 0);
         Price price = new Price(1, startDate, endDate, 2, 35455L, 0, new BigDecimal("25.45"), "EUR");
 
-        when(dataPriceRepository.findAll()).thenReturn(List.of(entity));
+        when(dataPriceRepository.findAll()).thenReturn(Flux.just(entity));
         when(priceMapper.toDomain(entity)).thenReturn(price);
 
-        List<Price> result = adapter.findAll();
+        Flux<Price> resultFlux = adapter.findAll();
 
-        assertEquals(1, result.size());
-        assertEquals(price, result.getFirst());
+        StepVerifier.create(resultFlux)
+            .expectNext(price)
+            .verifyComplete();
         verify(dataPriceRepository).findAll();
     }
 }

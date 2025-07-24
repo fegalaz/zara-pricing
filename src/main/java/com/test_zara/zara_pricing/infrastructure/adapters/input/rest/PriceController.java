@@ -6,14 +6,14 @@ import com.test_zara.zara_pricing.infrastructure.mappers.PriceMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.test_zara.zara_pricing.infrastructure.dto.PriceResponse;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/api/v1/rest/prices")
@@ -28,29 +28,23 @@ public class PriceController implements PriceControllerApi {
     private final PriceMapper priceMapper;
 
     @Override
-    public ResponseEntity<PriceResponse> getFinalPrice(LocalDateTime date, Long productId, Integer brandId) {
+    public Mono<PriceResponse> getFinalPrice(LocalDateTime date, Long productId, Integer brandId) {
         log.info("Requesting final price for productId: {}, brandId: {}, date: {}", productId, brandId, date);
-
-        return ResponseEntity.ok(
-                priceMapper.toDto(priceInputPort.getFinalPrice(date, productId, brandId))
-        );
+        return priceInputPort.getFinalPrice(date, productId, brandId)
+                .map(priceMapper::toDto);
     }
 
     @Override
-    public ResponseEntity<PriceResponse> getFinalPriceWithConvention(LocalDateTime date, Long productId, Integer brandId) {
+    public Mono<PriceResponse> getFinalPriceWithConvention(LocalDateTime date, Long productId, Integer brandId) {
         log.info("Requesting final price with convention for productId: {}, brandId: {}, date: {}", productId, brandId, date);
-
-        return ResponseEntity.ok(
-                priceMapper.toDto(priceInputPort.getFinalPriceWithConvention(date, productId, brandId))
-        );
+        return priceInputPort.getFinalPriceWithConvention(date, productId, brandId)
+                .map(priceMapper::toDto);
     }
 
     @Override
-    public ResponseEntity<List<PriceResponse>> getPricesListAll() {
+    public Flux<PriceResponse> getPricesListAll() {
         log.info("Requesting all prices list");
-
-        return ResponseEntity.ok(
-                priceMapper.toDto(priceInputPort.getPricesListAll())
-        );
+        return priceInputPort.getPricesListAll()
+                .map(priceMapper::toDto);
     }
 }
